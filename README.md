@@ -28,3 +28,4 @@ The MVP project has four main components: frontend, backend, ML model and databa
 3. Create the virtual environment `python -m venv .venv`
 4. Activate the venv. Open the file in command prompt `.venv\Scripts\activate.bat`
 5. Install dependencies from requirements.txt file `pip install -r requirements.txt`
+6. If you include any new packages to the projects, then update the requirements.txt file using `pip freeze > requirements.txt`
