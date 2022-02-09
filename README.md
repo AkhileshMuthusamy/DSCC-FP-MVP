@@ -20,3 +20,22 @@ The MVP project has four main components: frontend, backend, ML model and databa
 * Development - `dev` branch
 * Testing - `uat` branch
 * Production - `main` branch
+
+# Setup Virtual Environment for Python
+
+1. Clone the repository.
+2. Using command prompt navigate to the root folder of the project.
+3. Create the virtual environment `python -m venv .venv`
+4. Activate the venv. Open the file in command prompt `.venv\Scripts\activate.bat`
+5. Install dependencies from requirements.txt file `pip install -r requirements.txt`
+6. If you include any new packages to the projects, then update the requirements.txt file using `pip freeze > requirements.txt`
+
+# Working with Git
+
+1. Clone the repository `git clone https://github.com/AkhileshMuthusamy/DSCC-FP-MVP.git`
+2. Switch to the desired branch `git checkout data-collection`
+3. Make changes to the files
+4. Review your changes using `git diff`
+5. Stage the changes using `git add .`
+6. Now commit the changes using `git commit -m "commit-message-here"`
+7. Push your commit to remote using `git push`
