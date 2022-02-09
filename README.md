@@ -20,3 +20,11 @@ The MVP project has four main components: frontend, backend, ML model and databa
 * Development - `dev` branch
 * Testing - `uat` branch
 * Production - `main` branch
+
+# Setup Virtual Environment for Python
+
+1. Clone the repository.
+2. Using command prompt navigate to the root folder of the project.
+3. Create the virtual environment `python -m venv .venv`
+4. Activate the venv. Open the file in command prompt `.venv\Scripts\activate.bat`
+5. Install dependencies from requirements.txt file `pip install -r requirements.txt`
