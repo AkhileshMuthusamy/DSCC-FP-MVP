@@ -63,8 +63,8 @@ if __name__ == "__main__":
     apple_stock.display_data()
 
     samsung_stock = StockDataCollection('SSNLF', '2021-01-01', '2021-12-31')
-    apple_stock.export_to_file('ml_model/data/samsung')
-    apple_stock.display_data()
+    samsung_stock.export_to_file('ml_model/data/samsung')
+    samsung_stock.display_data()
 
 
 
