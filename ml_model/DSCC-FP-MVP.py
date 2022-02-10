@@ -1,63 +1,70 @@
-#    This is a python project for collecting finance data from yfinance
-#    Install the required libraries
-# pip install yfinance
-# pip install pandas
-#    Importing the libraries
-import pandas as pd
+
+from typing import Optional
+from pandas import DataFrame
 import yfinance as yf
-from csv import reader
 
-class dataCollection:
+class StockDataCollection:
 
-    def __init__(self, startDate, endDate,stockName):
-        self.startDate = startDate
-        self.endDate = endDate
-        self.stockName=stockName
+    __data = None
 
-    def appleDataCollection(self,stockName):
-        # apple = yf.Ticker(stockName)
-        # get stock info
-        # print('Apple Stock data ',apple.info)
-        # downloading the apple stock data from 2021-01-01 and 2021-12-31
-        data_apple = yf.download(stockName, start="2021-01-01", end="2021-12-31")
-        data_apple.to_csv('apple.csv')
-        return None
-    def readAppleData(self):
-        # open file in read mode
-        with open('apple.csv', 'r') as data:
-            # pass the file object to reader() and it gives reader object
-            csv_reader = reader(data)
-            # Iterate over each row in the csv using reader object
-            for row in csv_reader:
-                # row variable prints each row in the csv
-                print(row)
+    def __init__(self, stock_name: str, start_date: str, end_date: str) -> None:
+        """Fetch stock data from Yahoo Finance based on stock_name, start_date and end_date
 
-    def samsungDataCollection(self,stockName):
-        # samsung = yf.Ticker(stockName)
-        # get stock info
-        # print('Samsung Stock data ',samsung.info)
-        # downloading the samsung stock data from 2021-01-01 and 2021-12-31
-        data_samsung = yf.download(stockName, start="2021-01-01", end="2021-12-31")
-        data_samsung.to_csv('samsung.csv')
-        return None
+        Args:
+            stock_name (str): Name of the stock
+            start_date (str): Date in 'YYYY-MM-DD' format
+            end_date (str): Date in 'YYYY-MM-DD' format
+        """
+        self.stock_name = stock_name
+        self.start_date = start_date
+        self.end_date = end_date
 
-    def readSamsungData(self):
-        # open file in read mode
-        with open('samsung.csv', 'r') as data:
-            # pass the file object to reader() and it gives reader object
-            csv_reader = reader(data)
-            # Iterate over each row in the csv using reader object
-            for row in csv_reader:
-                # row variable prints each row in the csv
-                print(row)
+        self.fetch_stock_data()
 
-d= dataCollection("2021-01-01","2021-12-31","AAPL")
-d.appleDataCollection("AAPL")
-d.readAppleData()
+    def fetch_stock_data(self) -> DataFrame:
+        """Download the stock market data based on stock_name, start_date and end_date
 
-d1= dataCollection("2021-01-01","2021-12-31","AAPL")
-d1.samsungDataCollection("SSNLF")
-d1.readSamsungData()
+        Returns:
+            DataFrame: Returns pandas DataFrame
+        """
+        print(f'Downloading stock data: {self.stock_name}')
+        self.__data = yf.download(self.stock_name, start=self.start_date, end=self.end_date)
+        return self.__data
+
+
+    def export_to_file(self, file_name: Optional[str] = None) -> None:
+        """Export the stock data in to file
+
+        Args:
+            file_name (Optional[str], optional): Custom file name for the csv file. Defaults to None.
+        """
+        if isinstance(self.__data, DataFrame):
+            file_path = f'{file_name}.csv' if file_name else f'{self.stock_name}.csv'
+            self.__data.to_csv(file_path)
+            print('-'*100)
+            print(f'Exported file: {file_path}')
+            print('-'*100)
+        else:
+            raise Exception("No date to export")
+
+    def display_data(self) -> None:
+        """Displays stock data in the command terminal
+        """
+        print('-'*100)
+        print(f'Stock Name: {self.stock_name}')
+        print('-'*100)
+        print(self.__data)
+        print('-'*100, end='\n')
+
+
+if __name__ == "__main__":
+    apple_stock = StockDataCollection('AAPL', '2021-01-01', '2021-12-31')
+    apple_stock.export_to_file()
+    apple_stock.display_data()
+
+    samsung_stock = StockDataCollection('SSNLF', '2021-01-01', '2021-12-31')
+    apple_stock.export_to_file('ml_model/data/samsung')
+    apple_stock.display_data()
 
 
 
