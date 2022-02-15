@@ -13,7 +13,7 @@ The MVP project has four main components: frontend, backend, ML model and databa
 * Frontend - Web App: Angular / React.js
 * Backend - Python: Flask
 * ML Model - Python: Jupyter notebook
-* Database - MongoDB / Firebase
+* Database - MongoDB
 
 # Environment
 
