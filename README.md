@@ -33,7 +33,7 @@ The MVP project has four main components: frontend, backend, ML model and databa
 # Working with Git
 
 1. Clone the repository `git clone https://github.com/AkhileshMuthusamy/DSCC-FP-MVP.git`
-2. Switch to the desired branch `git checkout data-collection`
+2. Switch to the desired branch `git checkout branch-name`
 3. Make changes to the files
 4. Review your changes using `git diff`
 5. Stage the changes using `git add .`
