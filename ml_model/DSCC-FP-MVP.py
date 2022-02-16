@@ -1,7 +1,9 @@
-
 from typing import Optional
-from pandas import DataFrame
+
 import yfinance as yf
+from pandas import DataFrame
+
+storage = __import__("DSCC-FP-MVP-Storage")
 
 class StockDataCollection:
 
@@ -15,9 +17,9 @@ class StockDataCollection:
             start_date (str): Date in 'YYYY-MM-DD' format
             end_date (str): Date in 'YYYY-MM-DD' format
         """
-        self.stock_name = stock_name
-        self.start_date = start_date
-        self.end_date = end_date
+        self._stock_name = stock_name
+        self._start_date = start_date
+        self._end_date = end_date
 
         self.fetch_stock_data()
 
@@ -27,9 +29,15 @@ class StockDataCollection:
         Returns:
             DataFrame: Returns pandas DataFrame
         """
-        print(f'Downloading stock data: {self.stock_name}')
-        self.__data = yf.download(self.stock_name, start=self.start_date, end=self.end_date)
+        print(f'Downloading stock data: {self._stock_name}')
+        self.__data = yf.download(self._stock_name, start=self._start_date, end=self._end_date)
         return self.__data
+
+    def get_stock_data(self) -> DataFrame:
+        return self.__data
+
+    def get_stock_name(self) -> str:
+        return self._stock_name
 
 
     def export_to_file(self, file_name: Optional[str] = None) -> None:
@@ -39,7 +47,7 @@ class StockDataCollection:
             file_name (Optional[str], optional): Custom file name for the csv file. Defaults to None.
         """
         if isinstance(self.__data, DataFrame):
-            file_path = f'{file_name}.csv' if file_name else f'{self.stock_name}.csv'
+            file_path = f'{file_name}.csv' if file_name else f'{self._stock_name}.csv'
             self.__data.to_csv(file_path)
             print('-'*100)
             print(f'Exported file: {file_path}')
@@ -51,7 +59,7 @@ class StockDataCollection:
         """Displays stock data in the command terminal
         """
         print('-'*100)
-        print(f'Stock Name: {self.stock_name}')
+        print(f'Stock Name: {self._stock_name}')
         print('-'*100)
         print(self.__data)
         print('-'*100, end='\n')
@@ -59,12 +67,12 @@ class StockDataCollection:
 
 if __name__ == "__main__":
     apple_stock = StockDataCollection('AAPL', '2021-01-01', '2021-12-31')
-    apple_stock.export_to_file()
-    apple_stock.display_data()
+    storage.store_data(apple_stock.get_stock_data(), apple_stock.get_stock_name())
+    storage.print_data(storage.fetch_stock_data_from_db('AAPL', '2021-01-01', '2021-02-31'))
 
     samsung_stock = StockDataCollection('SSNLF', '2021-01-01', '2021-12-31')
-    samsung_stock.export_to_file('ml_model/data/samsung')
-    samsung_stock.display_data()
+    storage.store_data(samsung_stock.get_stock_data(), samsung_stock.get_stock_name())
+    storage.print_data(storage.fetch_stock_data_from_db('SSNLF', '2021-01-01', '2021-12-31'))
 
 
 
