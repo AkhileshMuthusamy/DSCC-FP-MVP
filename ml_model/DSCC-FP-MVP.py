@@ -66,13 +66,19 @@ class StockDataCollection:
 
 
 if __name__ == "__main__":
+    # Collecting Apple stock from API
     apple_stock = StockDataCollection('AAPL', '2021-01-01', '2021-12-31')
+    # Store the Apple stock in database
     storage.store_data(apple_stock.get_stock_data(), apple_stock.get_stock_name())
-    storage.print_data(storage.fetch_stock_data_from_db('AAPL', '2021-01-01', '2021-02-31'))
+    # Fetch data from database and display in tabular view
+    storage.print_data(storage.fetch_stock_data_from_db('AAPL', '2021-01-01', '2021-01-10'))
 
+    # Collecting Samsung stock from API
     samsung_stock = StockDataCollection('SSNLF', '2021-01-01', '2021-12-31')
+    # Store the Samsung stock in database
     storage.store_data(samsung_stock.get_stock_data(), samsung_stock.get_stock_name())
-    storage.print_data(storage.fetch_stock_data_from_db('SSNLF', '2021-01-01', '2021-12-31'))
+    # Fetch data from database and display in tabular view
+    storage.print_data(storage.fetch_stock_data_from_db('SSNLF', '2021-12-01', '2021-12-31'))
 
 
 

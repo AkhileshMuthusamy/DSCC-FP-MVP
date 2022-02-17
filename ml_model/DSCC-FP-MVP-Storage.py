@@ -13,10 +13,27 @@ client = pymongo.MongoClient(configuration['mongo_uri'])
 db = client[configuration['database_name']]
 
 def convert_dataframe_to_list(df: DataFrame) -> List[object]:
+    """Converts dataframe into list and resets the dataframe index
+
+    Args:
+        df (DataFrame): Pandas DataFrame
+
+    Returns:
+        List[object]: List of dictionary
+    """
     df.reset_index(inplace=True)
     return list(df.T.to_dict().values())
 
 def store_data(data: DataFrame, stock_name: str) -> InsertManyResult:
+    """Inserts the stock data into MongoDB
+
+    Args:
+        data (DataFrame): Pandas DataFrame
+        stock_name (str): Name of the Stock
+
+    Returns:
+        InsertManyResult: Response from PyMongo
+    """
     data['stock'] = stock_name
     stock_data = convert_dataframe_to_list(data)
     result = db.stock_price.insert_many(stock_data)
@@ -24,12 +41,22 @@ def store_data(data: DataFrame, stock_name: str) -> InsertManyResult:
     
 
 def fetch_stock_data_from_db(stock_name: str, start_date: Optional[str] = None, end_date: Optional[str] = None) -> List[object]:
-    if start_date or end_date:
+    """Retrieve the stock data from MongoDb collection
+
+    Args:
+        stock_name (str): Stock Name
+        start_date (Optional[str], optional): Start date to filter records. Defaults to None.
+        end_date (Optional[str], optional): End date to filter records. Defaults to None.
+
+    Returns:
+        List[object]: List of dictionaries
+    """
+    if start_date and end_date:
         search_query = {
             "stock": stock_name,
             "Date": {
-                '$gte':  dt.datetime.strptime(start_date, '%Y-%m-%d') if start_date else dt.datetime.utcnow(),
-                '$lt': dt.datetime.strptime(end_date, '%Y-%m-%d') + dt.timedelta(1) if end_date else dt.datetime.utcnow()
+                '$gte':  dt.datetime.strptime(start_date, '%Y-%m-%d'),
+                '$lt': dt.datetime.strptime(end_date, '%Y-%m-%d') + dt.timedelta(1)
             }
         }
     else:
@@ -42,12 +69,21 @@ def fetch_stock_data_from_db(stock_name: str, start_date: Optional[str] = None, 
 
 
 def fetch_all_data() -> List[object]:
+    """Retrieve all data from the database.
+
+    Returns:
+        List[object]: List of dictionaries
+    """
     records = db.stock_price.find({})
     output = [record for record in records]
-    print(output)
     return output
 
 def print_data(data: List[object]):
+    """Format the data into table view and display it in the terminal
+
+    Args:
+        data (List[object]): Data from the database
+    """
     
     print('='*84)
     print("{:<7} {:<11} {:<10} {:<10} {:<10} {:<10} {:<10} {:<10}".format('Stock', 'Date', 'Open','High','Low','Close','Adj Close','Volume'))
