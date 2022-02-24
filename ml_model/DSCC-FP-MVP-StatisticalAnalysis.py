@@ -144,10 +144,22 @@ class StatisticalAnalysis:
         """Format the data into table view and display it in the terminal
 
         """
+        print('-'*100)
+        print(' '*50+"{:<25} ".format('DESCRIBE')+' '*50)
+        print('-'*100)
+        print(self.statisticalData1.describe())
+        print('-'*100)
+        print(' '*50+"{:<25} ".format('SHAPE OF DATA')+' '*50)
+        print('-'*100)
+        print(self.statisticalData1.shape)
+        print('-'*100)
+        print(' '*50+"{:<25} ".format('DIMENSION OF DATA')+' '*50)
+        print('-'*100)
+        print(self.statisticalData1.ndim)
         print('='*84)
         print("{:<7} {:<20} {:<10} {:<10} {:<10} {:<10} {:<10} {:<10}".format('Stock','StatisticalCharacteristics', 'Open', 'High', 'Low', 'Close', 'AdjClose', 'Volume'))
         print('-'*84)
-        # print(self.statisticalData1.describe())
+        
         for index,row in self.statisticalData1.iterrows():
             # print("loop1")
             obj=row
@@ -188,18 +200,18 @@ class StatisticalAnalysis:
     
 
 s =StatisticalAnalysis()
-print('-'*100)
+print('*'*100)
 print(' '*50+"{:<25} ".format('AAPL')+' '*50)
-print('-'*100)
+print('*'*100)
 s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('AAPL'),'AAPL')
 
-print('-'*100)
+print('*'*100)
 print(' '*50+"{:<25} ".format('SSNLF')+' '*50)
-print('-'*100)
+print('*'*100)
 s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('SSNLF'),'SSNLF')
-print('-'*100)
+print('*'*100)
 print(' '*50+"{:<25} ".format('IBM')+' '*50)
-print('-'*100)
+print('*'*100)
 s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('IBM'),'IBM')
 
 
