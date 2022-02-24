@@ -199,19 +199,19 @@ class StatisticalAnalysis:
         self.getFinalStatisticalAnalysis()
     
 
-s =StatisticalAnalysis()
-print('*'*100)
-print(' '*50+"{:<25} ".format('AAPL')+' '*50)
-print('*'*100)
-s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('AAPL'),'AAPL')
+# s =StatisticalAnalysis()
+# print('*'*100)
+# print(' '*50+"{:<25} ".format('AAPL')+' '*50)
+# print('*'*100)
+# s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('AAPL'),'AAPL')
 
-print('*'*100)
-print(' '*50+"{:<25} ".format('SSNLF')+' '*50)
-print('*'*100)
-s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('SSNLF'),'SSNLF')
-print('*'*100)
-print(' '*50+"{:<25} ".format('IBM')+' '*50)
-print('*'*100)
-s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('IBM'),'IBM')
+# print('*'*100)
+# print(' '*50+"{:<25} ".format('SSNLF')+' '*50)
+# print('*'*100)
+# s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('SSNLF'),'SSNLF')
+# print('*'*100)
+# print(' '*50+"{:<25} ".format('IBM')+' '*50)
+# print('*'*100)
+# s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('IBM'),'IBM')
 
 
