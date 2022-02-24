@@ -6,7 +6,7 @@ from pandas import DataFrame
 storage = __import__("DSCC-FP-MVP-Storage")
 viz = __import__("DSCC-FP-MVP-Visualization")
 stat= __import__("DSCC-FP-MVP-StatisticalAnalysis")
-
+s = stat.StatisticalAnalysis()
 
 class StockDataCollection:
 
@@ -71,42 +71,47 @@ class StockDataCollection:
 if __name__ == "__main__":
     s=stat.StatisticalAnalysis()
     # Collecting Apple stock from API
-    apple_stock = StockDataCollection('AAPL', '2021-01-01', '2021-12-31')
+    apple_stock = StockDataCollection('AAPL', '2020-01-01', '2020-12-31')
     # Store the Apple stock in database
     storage.store_data(apple_stock.get_stock_data(), apple_stock.get_stock_name())
-    # Visualize Apple stock in OHLC chart
-    viz.ohlc_chart(storage.fetch_stock_data_from_db('AAPL'))
+    apple_stock_data = storage.fetch_stock_data_from_db('AAPL')
     # Performing the statistical analysis on Apple stock data
     print('*'*100)
     print(' '*50+"{:<25} ".format('AAPL')+' '*50)
     print('*'*100)
-    s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('AAPL'),'AAPL')
+    s.statistical_analysis(apple_stock_data,'AAPL')
     s=stat.StatisticalAnalysis()
+    
+
 
     # Collecting Samsung stock from API
-    samsung_stock = StockDataCollection('SSNLF', '2021-01-01', '2021-12-31')
+    samsung_stock = StockDataCollection('SSNLF', '2020-01-01', '2020-12-31')
     # Store the Samsung stock in database
     storage.store_data(samsung_stock.get_stock_data(), samsung_stock.get_stock_name())
-    # Visualize Samsung stock in OHLC chart
-    viz.ohlc_chart(storage.fetch_stock_data_from_db('SSNLF'))
+    samsung_stock_data = storage.fetch_stock_data_from_db('SSNLF')
     # Performing the statistical analysis on Samsung stock data
     print('*'*100)
     print(' '*50+"{:<25} ".format('SSNLF')+' '*50)
     print('*'*100)
-    s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('SSNLF'),'SSNLF')
+    s.statistical_analysis(samsung_stock_data,'SSNLF')
     s=stat.StatisticalAnalysis()
     # Collecting IBM stock from API
     ibm_stock = StockDataCollection('IBM', '2020-01-01', '2021-12-31')
     # Store the IBM stock in database
     storage.store_data(ibm_stock.get_stock_data(), ibm_stock.get_stock_name())
-    # Visualize IBM stock in OHLC chart
-    viz.ohlc_chart(storage.fetch_stock_data_from_db('IBM'))
+    ibm_stock_data = storage.fetch_stock_data_from_db('IBM')
     # Performing the statistical analysis on IBM stock data
     print('*'*100)
-    print(' '*50+"{:<25} ".format('IBM')+' '*50)
+    print(' '*50+"{:<25} ".format('SSNLF')+' '*50)
     print('*'*100)
-    s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('IBM'),'IBM')
+    s.statistical_analysis(ibm_stock_data,'IBM')
+    s=stat.StatisticalAnalysis()
     
+    # Fetch all data from database
+    stock_data = storage.fetch_all_data()
+    viz.ohlc_chart(stock_data)
+    viz.line_chart(stock_data, column="Close", y_label="Closing Price", title="Closing Price of stocks")
+    viz.line_chart(stock_data, column="Volume", y_label="Volume", title="Stock Volumes Over Time")
 
 
 
