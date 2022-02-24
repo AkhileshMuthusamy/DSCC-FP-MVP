@@ -6,7 +6,7 @@ from pandas import DataFrame
 storage = __import__("DSCC-FP-MVP-Storage")
 viz = __import__("DSCC-FP-MVP-Visualization")
 stat= __import__("DSCC-FP-MVP-StatisticalAnalysis")
-s=stat.StatisticalAnalysis()
+
 
 class StockDataCollection:
 
@@ -69,6 +69,7 @@ class StockDataCollection:
 
 
 if __name__ == "__main__":
+    s=stat.StatisticalAnalysis()
     # Collecting Apple stock from API
     apple_stock = StockDataCollection('AAPL', '2021-01-01', '2021-12-31')
     # Store the Apple stock in database
@@ -80,7 +81,7 @@ if __name__ == "__main__":
     print(' '*50+"{:<25} ".format('AAPL')+' '*50)
     print('*'*100)
     s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('AAPL'),'AAPL')
-
+    s=stat.StatisticalAnalysis()
 
     # Collecting Samsung stock from API
     samsung_stock = StockDataCollection('SSNLF', '2021-01-01', '2021-12-31')
@@ -93,7 +94,7 @@ if __name__ == "__main__":
     print(' '*50+"{:<25} ".format('SSNLF')+' '*50)
     print('*'*100)
     s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('SSNLF'),'SSNLF')
-
+    s=stat.StatisticalAnalysis()
     # Collecting IBM stock from API
     ibm_stock = StockDataCollection('IBM', '2020-01-01', '2021-12-31')
     # Store the IBM stock in database
