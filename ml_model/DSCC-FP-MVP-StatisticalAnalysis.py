@@ -1,8 +1,9 @@
 storage = __import__("DSCC-FP-MVP-Storage")
-from queue import PriorityQueue
-import pandas as pd
-from pandas import DataFrame
 import warnings
+from typing import List
+
+import pandas as pd
+
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
@@ -178,16 +179,19 @@ class StatisticalAnalysis:
 
 
     
-    def statisticalAnalysis_1(self,stock_data: DataFrame, stockName) -> None:
-        """Converts dataframe into list and resets the dataframe index
+    def statistical_analysis(self, stock_data: List[object]) -> None:
+        """Calculates statistical data and displays it in tabular view
 
         Args:
-            df (DataFrame): Pandas DataFrame
-            StockName
+            stock_data (List[object]): List of objects with keys 'Open', 'High', 'Low', 'Close' and 'Volume'
         """
         df = pd.DataFrame(stock_data)
+        stockName = df['stock'].iloc[0]
         df.drop(["_id","Date",'stock'], axis=1, inplace=True)
         # print(df)
+        print('*'*100)
+        print(' '*50+"{:<25} ".format(stockName)+' '*50)
+        print('*'*100)
         #global statisticalData
         self.getMax(df,stockName)
         self.getMin(df,stockName)
@@ -198,20 +202,3 @@ class StatisticalAnalysis:
         self.getVariance(df,stockName)
         self.getFinalStatisticalAnalysis()
     
-
-# s =StatisticalAnalysis()
-# print('*'*100)
-# print(' '*50+"{:<25} ".format('AAPL')+' '*50)
-# print('*'*100)
-# s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('AAPL'),'AAPL')
-
-# print('*'*100)
-# print(' '*50+"{:<25} ".format('SSNLF')+' '*50)
-# print('*'*100)
-# s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('SSNLF'),'SSNLF')
-# print('*'*100)
-# print(' '*50+"{:<25} ".format('IBM')+' '*50)
-# print('*'*100)
-# s.statisticalAnalysis_1(storage.fetch_stock_data_from_db('IBM'),'IBM')
-
-
