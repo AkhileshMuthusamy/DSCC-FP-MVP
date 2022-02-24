@@ -4,6 +4,9 @@ import yfinance as yf
 from pandas import DataFrame
 
 storage = __import__("DSCC-FP-MVP-Storage")
+viz = __import__("DSCC-FP-MVP-Visualization")
+stat= __import__("DSCC-FP-MVP-StatisticalAnalysis")
+s = stat.StatisticalAnalysis()
 
 class StockDataCollection:
 
@@ -67,18 +70,37 @@ class StockDataCollection:
 
 if __name__ == "__main__":
     # Collecting Apple stock from API
-    apple_stock = StockDataCollection('AAPL', '2021-01-01', '2021-12-31')
+    apple_stock = StockDataCollection('AAPL', '2020-01-01', '2020-12-31')
     # Store the Apple stock in database
     storage.store_data(apple_stock.get_stock_data(), apple_stock.get_stock_name())
-    # Fetch data from database and display in tabular view
-    storage.print_data(storage.fetch_stock_data_from_db('AAPL', '2021-01-01', '2021-01-10'))
+    apple_stock_data = storage.fetch_stock_data_from_db('AAPL')
+    # Performing the statistical analysis on Apple stock data
+    s.statistical_analysis(apple_stock_data)
+
 
     # Collecting Samsung stock from API
-    samsung_stock = StockDataCollection('SSNLF', '2021-01-01', '2021-12-31')
+    samsung_stock = StockDataCollection('SSNLF', '2020-01-01', '2020-12-31')
     # Store the Samsung stock in database
     storage.store_data(samsung_stock.get_stock_data(), samsung_stock.get_stock_name())
-    # Fetch data from database and display in tabular view
-    storage.print_data(storage.fetch_stock_data_from_db('SSNLF', '2021-12-01', '2021-12-31'))
+    samsung_stock_data = storage.fetch_stock_data_from_db('SSNLF')
+    # Performing the statistical analysis on Samsung stock data
+    s.statistical_analysis(samsung_stock_data)
+
+    # Collecting IBM stock from API
+    ibm_stock = StockDataCollection('IBM', '2020-01-01', '2021-12-31')
+    # Store the IBM stock in database
+    storage.store_data(ibm_stock.get_stock_data(), ibm_stock.get_stock_name())
+    ibm_stock_data = storage.fetch_stock_data_from_db('IBM')
+    # Performing the statistical analysis on IBM stock data
+    s.statistical_analysis(ibm_stock_data)
+    
+    # Fetch all data from database
+    stock_data = storage.fetch_all_data()
+    viz.ohlc_chart(stock_data)
+    viz.line_chart(stock_data, column="Close", y_label="Closing Price", title="Closing Price of stocks")
+    viz.line_chart(stock_data, column="Volume", y_label="Volume", title="Stock Volumes Over Time")
+
+
 
 
 

@@ -74,7 +74,7 @@ def fetch_all_data() -> List[object]:
     Returns:
         List[object]: List of dictionaries
     """
-    records = db.stock_price.find({})
+    records = db.stock_price.find({}).sort('Date', pymongo.ASCENDING)
     output = [record for record in records]
     return output
 
