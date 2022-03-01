@@ -6,7 +6,6 @@ from pandas import DataFrame
 storage = __import__("DSCC-FP-MVP-Storage")
 viz = __import__("DSCC-FP-MVP-Visualization")
 stat= __import__("DSCC-FP-MVP-StatisticalAnalysis")
-s = stat.StatisticalAnalysis()
 
 class StockDataCollection:
 
@@ -69,6 +68,7 @@ class StockDataCollection:
 
 
 if __name__ == "__main__":
+    s = stat.StatisticalAnalysis()
     # Collecting Apple stock from API
     apple_stock = StockDataCollection('AAPL', '2020-01-01', '2020-12-31')
     # Store the Apple stock in database
@@ -76,8 +76,8 @@ if __name__ == "__main__":
     apple_stock_data = storage.fetch_stock_data_from_db('AAPL')
     # Performing the statistical analysis on Apple stock data
     s.statistical_analysis(apple_stock_data)
-
-
+    
+    s = stat.StatisticalAnalysis()
     # Collecting Samsung stock from API
     samsung_stock = StockDataCollection('SSNLF', '2020-01-01', '2020-12-31')
     # Store the Samsung stock in database
@@ -85,7 +85,8 @@ if __name__ == "__main__":
     samsung_stock_data = storage.fetch_stock_data_from_db('SSNLF')
     # Performing the statistical analysis on Samsung stock data
     s.statistical_analysis(samsung_stock_data)
-
+    
+    s = stat.StatisticalAnalysis()
     # Collecting IBM stock from API
     ibm_stock = StockDataCollection('IBM', '2020-01-01', '2021-12-31')
     # Store the IBM stock in database
@@ -93,6 +94,7 @@ if __name__ == "__main__":
     ibm_stock_data = storage.fetch_stock_data_from_db('IBM')
     # Performing the statistical analysis on IBM stock data
     s.statistical_analysis(ibm_stock_data)
+
     
     # Fetch all data from database
     stock_data = storage.fetch_all_data()
