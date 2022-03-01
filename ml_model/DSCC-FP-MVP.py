@@ -6,7 +6,6 @@ from pandas import DataFrame
 storage = __import__("DSCC-FP-MVP-Storage")
 viz = __import__("DSCC-FP-MVP-Visualization")
 stat= __import__("DSCC-FP-MVP-StatisticalAnalysis")
-s = stat.StatisticalAnalysis()
 
 class StockDataCollection:
 
@@ -69,43 +68,33 @@ class StockDataCollection:
 
 
 if __name__ == "__main__":
-    s=stat.StatisticalAnalysis()
+    s = stat.StatisticalAnalysis()
     # Collecting Apple stock from API
     apple_stock = StockDataCollection('AAPL', '2020-01-01', '2020-12-31')
     # Store the Apple stock in database
     storage.store_data(apple_stock.get_stock_data(), apple_stock.get_stock_name())
     apple_stock_data = storage.fetch_stock_data_from_db('AAPL')
     # Performing the statistical analysis on Apple stock data
-    print('*'*100)
-    print(' '*50+"{:<25} ".format('AAPL')+' '*50)
-    print('*'*100)
-    s.statistical_analysis(apple_stock_data,'AAPL')
-    s=stat.StatisticalAnalysis()
+    s.statistical_analysis(apple_stock_data)
     
-
-
+    s = stat.StatisticalAnalysis()
     # Collecting Samsung stock from API
     samsung_stock = StockDataCollection('SSNLF', '2020-01-01', '2020-12-31')
     # Store the Samsung stock in database
     storage.store_data(samsung_stock.get_stock_data(), samsung_stock.get_stock_name())
     samsung_stock_data = storage.fetch_stock_data_from_db('SSNLF')
     # Performing the statistical analysis on Samsung stock data
-    print('*'*100)
-    print(' '*50+"{:<25} ".format('SSNLF')+' '*50)
-    print('*'*100)
-    s.statistical_analysis(samsung_stock_data,'SSNLF')
-    s=stat.StatisticalAnalysis()
+    s.statistical_analysis(samsung_stock_data)
+    
+    s = stat.StatisticalAnalysis()
     # Collecting IBM stock from API
     ibm_stock = StockDataCollection('IBM', '2020-01-01', '2021-12-31')
     # Store the IBM stock in database
     storage.store_data(ibm_stock.get_stock_data(), ibm_stock.get_stock_name())
     ibm_stock_data = storage.fetch_stock_data_from_db('IBM')
     # Performing the statistical analysis on IBM stock data
-    print('*'*100)
-    print(' '*50+"{:<25} ".format('SSNLF')+' '*50)
-    print('*'*100)
-    s.statistical_analysis(ibm_stock_data,'IBM')
-    s=stat.StatisticalAnalysis()
+    s.statistical_analysis(ibm_stock_data)
+
     
     # Fetch all data from database
     stock_data = storage.fetch_all_data()

@@ -179,7 +179,7 @@ class StatisticalAnalysis:
 
 
     
-    def statistical_analysis(self, stock_data: List[object], stockName) -> None:
+    def statistical_analysis(self, stock_data: List[object]) -> None:
         """Calculates statistical data and displays it in tabular view
 
         Args:
