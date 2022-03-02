@@ -5,6 +5,7 @@ from pandas import DataFrame
 
 storage = __import__("DSCC-FP-MVP-Storage")
 viz = __import__("DSCC-FP-MVP-Visualization")
+dash_viz= __import__("DSCC-FP-MVP-InteractiveVisualization")
 stat= __import__("DSCC-FP-MVP-StatisticalAnalysis")
 
 class StockDataCollection:
@@ -68,39 +69,41 @@ class StockDataCollection:
 
 
 if __name__ == "__main__":
-    s = stat.StatisticalAnalysis()
-    # Collecting Apple stock from API
-    apple_stock = StockDataCollection('AAPL', '2020-01-01', '2020-12-31')
-    # Store the Apple stock in database
-    storage.store_data(apple_stock.get_stock_data(), apple_stock.get_stock_name())
-    apple_stock_data = storage.fetch_stock_data_from_db('AAPL')
-    # Performing the statistical analysis on Apple stock data
-    s.statistical_analysis(apple_stock_data)
+    # s = stat.StatisticalAnalysis()
+    # # Collecting Apple stock from API
+    # apple_stock = StockDataCollection('AAPL', '2020-01-01', '2020-12-31')
+    # # Store the Apple stock in database
+    # storage.store_data(apple_stock.get_stock_data(), apple_stock.get_stock_name())
+    # apple_stock_data = storage.fetch_stock_data_from_db('AAPL')
+    # # Performing the statistical analysis on Apple stock data
+    # s.statistical_analysis(apple_stock_data)
     
-    s = stat.StatisticalAnalysis()
-    # Collecting Samsung stock from API
-    samsung_stock = StockDataCollection('SSNLF', '2020-01-01', '2020-12-31')
-    # Store the Samsung stock in database
-    storage.store_data(samsung_stock.get_stock_data(), samsung_stock.get_stock_name())
-    samsung_stock_data = storage.fetch_stock_data_from_db('SSNLF')
-    # Performing the statistical analysis on Samsung stock data
-    s.statistical_analysis(samsung_stock_data)
+    # s = stat.StatisticalAnalysis()
+    # # Collecting Samsung stock from API
+    # samsung_stock = StockDataCollection('SSNLF', '2020-01-01', '2020-12-31')
+    # # Store the Samsung stock in database
+    # storage.store_data(samsung_stock.get_stock_data(), samsung_stock.get_stock_name())
+    # samsung_stock_data = storage.fetch_stock_data_from_db('SSNLF')
+    # # Performing the statistical analysis on Samsung stock data
+    # s.statistical_analysis(samsung_stock_data)
     
-    s = stat.StatisticalAnalysis()
-    # Collecting IBM stock from API
-    ibm_stock = StockDataCollection('IBM', '2020-01-01', '2021-12-31')
-    # Store the IBM stock in database
-    storage.store_data(ibm_stock.get_stock_data(), ibm_stock.get_stock_name())
-    ibm_stock_data = storage.fetch_stock_data_from_db('IBM')
-    # Performing the statistical analysis on IBM stock data
-    s.statistical_analysis(ibm_stock_data)
+    # s = stat.StatisticalAnalysis()
+    # # Collecting IBM stock from API
+    # ibm_stock = StockDataCollection('IBM', '2020-01-01', '2021-12-31')
+    # # Store the IBM stock in database
+    # storage.store_data(ibm_stock.get_stock_data(), ibm_stock.get_stock_name())
+    # ibm_stock_data = storage.fetch_stock_data_from_db('IBM')
+    # # Performing the statistical analysis on IBM stock data
+    # s.statistical_analysis(ibm_stock_data)
 
     
-    # Fetch all data from database
-    stock_data = storage.fetch_all_data()
-    viz.ohlc_chart(stock_data)
-    viz.line_chart(stock_data, column="Close", y_label="Closing Price", title="Closing Price of stocks")
-    viz.line_chart(stock_data, column="Volume", y_label="Volume", title="Stock Volumes Over Time")
+    # # Fetch all data from database
+    # stock_data = storage.fetch_all_data()
+    # viz.ohlc_chart(stock_data)
+    # viz.line_chart(stock_data, column="Close", y_label="Closing Price", title="Closing Price of stocks")
+    # viz.line_chart(stock_data, column="Volume", y_label="Volume", title="Stock Volumes Over Time")
+
+    dash_viz.app.run_server(debug=True)
 
 
 
