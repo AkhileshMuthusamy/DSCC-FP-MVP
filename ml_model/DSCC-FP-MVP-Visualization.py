@@ -80,7 +80,7 @@ def line_chart(stock_data: List[object], column: str, y_label: str, title: str) 
     fig.show()
 
 
-def dash_line_chart(df: DataFrame, start: str, end: str, stock_ticks: List[str], column: str, y_label: str, title: str) -> None:
+def dash_line_chart(df: DataFrame, stock_ticks: List[str], column: str, y_label: str, title: str, start: str = None, end: str = None) -> None:
     """Function to display plotly line chart
 
     Args:
@@ -98,10 +98,14 @@ def dash_line_chart(df: DataFrame, start: str, end: str, stock_ticks: List[str],
 
     for tick in stock_ticks:
         stock_df = df.iloc[stock_group.groups[tick]]
-        # Add traces
-        fig.add_trace(
-            go.Scatter(x=stock_df['Date'], y=stock_df[column], name=f"{stock_df['stock'].iloc[0]}")
-        )
+        if start and end:
+            stock_df = stock_df[stock_df["Date"].isin(pd.date_range(start, end))]
+        
+        if len(stock_df) > 0:
+            # Add traces
+            fig.add_trace(
+                go.Scatter(x=stock_df['Date'], y=stock_df[column], name=f"{stock_df['stock'].iloc[0]}")
+            )
 
     # Add figure title
     fig.update_layout(

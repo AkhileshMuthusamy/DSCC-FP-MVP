@@ -18,8 +18,8 @@ for tic in df['stock'].unique():
     options.append(option)
 
 
-fig1 = viz.dash_line_chart(df, '', '', list(df['stock'].unique()), column="Close", y_label="Closing Price", title="Closing Price of stocks")
-fig2 = viz.dash_line_chart(df, '', '', list(df['stock'].unique()), column="Volume", y_label="Volume", title="Stock Volumes Over Time")
+fig1 = viz.dash_line_chart(df, list(df['stock'].unique()), column="Close", y_label="Closing Price", title="Closing Price of stocks")
+fig2 = viz.dash_line_chart(df, list(df['stock'].unique()), column="Volume", y_label="Volume", title="Stock Volumes Over Time")
 
 app.layout = html.Div(children=[
     html.H1(children='Stock Ticker Dashboard'),
@@ -85,7 +85,7 @@ def update_close_price_graph(n_clicks, stock_ticker, start_date, end_date):
     start = datetime.strptime(start_date[:10], '%Y-%m-%d')
     end = datetime.strptime(end_date[:10], '%Y-%m-%d')
     # Traces are the figure data for each dropdown element selected 
-    fig = viz.dash_line_chart(df, start, end, stock_ticker, column="Close", y_label="Closing Price 1", title="Closing Price of stocks")
+    fig = viz.dash_line_chart(df, stock_ticker, column="Close", y_label="Closing Price", title="Closing Price of stocks", start=start, end=end)
     return fig
 
 @app.callback(
@@ -103,5 +103,5 @@ def update_close_price_graph(n_clicks, stock_ticker, start_date, end_date):
     start = datetime.strptime(start_date[:10], '%Y-%m-%d')
     end = datetime.strptime(end_date[:10], '%Y-%m-%d')
     # Traces are the figure data for each dropdown element selected 
-    fig = viz.dash_line_chart(df, start, end, stock_ticker, column="Volume", y_label="Volume", title="Stock Volumes Over Time")
+    fig = viz.dash_line_chart(df, stock_ticker, column="Volume", y_label="Volume", title="Stock Volumes Over Time", start=start, end=end)
     return fig
