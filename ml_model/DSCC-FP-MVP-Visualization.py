@@ -78,3 +78,46 @@ def line_chart(stock_data: List[object], column: str, y_label: str, title: str) 
     # Set y-axes titles
     fig.update_yaxes(title_text=y_label)
     fig.show()
+
+
+def dash_line_chart(stock_data: List[object], column: str, y_label: str, title: str) -> None:
+    """Function to display plotly line chart
+
+    Args:
+        stock_data (List[object]): List of objects with keys 'Open', 'High', 'Low', 'Close' and 'Volume'
+        column (str): Field to be used for Y-axis 
+        y_label (str): Chart Y-axis label
+        title (str): Chart title
+    """
+    df = pd.DataFrame(stock_data)
+    df.drop(["_id"], axis=1, inplace=True)
+    stock_group = df.groupby(['stock'])
+    stocks = stock_group.groups.keys()
+    
+    fig = make_subplots()
+
+    for key in stocks:
+        stock_df = df.iloc[stock_group.groups[key]]
+        # Add traces
+        fig.add_trace(
+            go.Scatter(x=stock_df['Date'], y=stock_df[column], name=f"{stock_df['stock'].iloc[0]}")
+        )
+
+    # Add figure title
+    fig.update_layout(
+        title={
+                'text': title,
+                'y':0.9,
+                'x':0.5,
+                'xanchor': 'center',
+                'yanchor': 'top'
+            },
+    )
+
+    # Set x-axis title
+    fig.update_xaxes(title_text="Date")
+    # Set y-axes titles
+    fig.update_yaxes(title_text=y_label)
+
+
+    return fig
