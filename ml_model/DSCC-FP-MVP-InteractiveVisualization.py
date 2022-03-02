@@ -1,6 +1,8 @@
-from dash import Dash, dcc, html
-import pandas as pd
 from datetime import datetime
+
+import pandas as pd
+from dash import Dash, dcc, html
+from dash.dependencies import Input, Output, State
 
 viz = __import__("DSCC-FP-MVP-Visualization")
 storage = __import__("DSCC-FP-MVP-Storage")
@@ -16,8 +18,8 @@ for tic in df['stock'].unique():
     options.append(option)
 
 
-fig1 = viz.dash_line_chart(stock_data, column="Close", y_label="Closing Price", title="Closing Price of stocks")
-fig2 = viz.dash_line_chart(stock_data, column="Volume", y_label="Volume", title="Stock Volumes Over Time")
+fig1 = viz.dash_line_chart(df, '', '', list(df['stock'].unique()), column="Close", y_label="Closing Price", title="Closing Price of stocks")
+fig2 = viz.dash_line_chart(df, '', '', list(df['stock'].unique()), column="Volume", y_label="Volume", title="Stock Volumes Over Time")
 
 app.layout = html.Div(children=[
     html.H1(children='Stock Ticker Dashboard'),
@@ -31,7 +33,7 @@ app.layout = html.Div(children=[
         dcc.Dropdown(
             id='dropdown',
             options=options,
-            value=options[0]['value'], # Default company that will shown to user at initialization
+            value=list(df['stock'].unique()), # Default company that will shown to user at initialization
             multi=True
         )
     ], style={'width':'30%', 'display':'inline-block', 'verticalAlign':'top', 'paddingRight':'25px'}),
@@ -67,3 +69,39 @@ app.layout = html.Div(children=[
         figure=fig2
     )
 ])
+
+@app.callback(
+    # The figure component of graph is the output that we want to change when submit is clicked
+    Output('line-graph-close','figure'),
+    # Our input is the button click
+    [Input('submit-button', 'n_clicks')],
+    # These states are the intermediary values to keep in memory before click
+    [State('dropdown','value'), State('date-picker','start_date'), State('date-picker','end_date')]
+)
+def update_close_price_graph(n_clicks, stock_ticker, start_date, end_date):
+    print('='*50)
+    print(n_clicks, stock_ticker, start_date, end_date)
+    print('='*50)
+    start = datetime.strptime(start_date[:10], '%Y-%m-%d')
+    end = datetime.strptime(end_date[:10], '%Y-%m-%d')
+    # Traces are the figure data for each dropdown element selected 
+    fig = viz.dash_line_chart(df, start, end, stock_ticker, column="Close", y_label="Closing Price 1", title="Closing Price of stocks")
+    return fig
+
+@app.callback(
+    # The figure component of graph is the output that we want to change when submit is clicked
+    Output('line-graph-volume','figure'),
+    # Our input is the button click
+    [Input('submit-button', 'n_clicks')],
+    # These states are the intermediary values to keep in memory before click
+    [State('dropdown','value'), State('date-picker','start_date'), State('date-picker','end_date')]
+)
+def update_close_price_graph(n_clicks, stock_ticker, start_date, end_date):
+    print('='*50)
+    print(n_clicks, stock_ticker, start_date, end_date)
+    print('='*50)
+    start = datetime.strptime(start_date[:10], '%Y-%m-%d')
+    end = datetime.strptime(end_date[:10], '%Y-%m-%d')
+    # Traces are the figure data for each dropdown element selected 
+    fig = viz.dash_line_chart(df, start, end, stock_ticker, column="Volume", y_label="Volume", title="Stock Volumes Over Time")
+    return fig
