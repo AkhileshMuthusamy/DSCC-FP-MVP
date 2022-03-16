@@ -1,4 +1,3 @@
-import math
 from datetime import datetime, timedelta
 from typing import List
 
@@ -10,6 +9,8 @@ from keras.models import Sequential
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.optimizers import SGD
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
 
 plt.style.use('seaborn-whitegrid')
 
@@ -147,15 +148,34 @@ class TimeSeriesAnalysis:
 
     def visualize(self):
 
+
         for i in self._stock_list:
             time_index = self.df_[i]["Test"][60:].index
             df_pred = pd.Series(self.pred_result[i]["Pred"].reshape(-1), index=time_index)
             df_true = pd.Series(self.pred_result[i]["True"].reshape(-1), index=time_index)
-            
-            
-            print("MSE: ", mean_squared_error(np.array(df_true), np.array(df_pred)))
+            mse = mean_squared_error(np.array(df_true), np.array(df_pred))
+            fig = make_subplots()
+            fig.add_trace(go.Scatter(x=time_index, y=df_pred, name="Prediction"))
+            fig.add_trace(go.Scatter(x=time_index, y=df_true, name="Actual data"))
+            # Add figure title
+            fig.update_layout(
+                title={
+                        'text': f'{i} Closing Price Prediction with MSE: {mse}',
+                        'y':0.9,
+                        'x':0.5,
+                        'xanchor': 'center',
+                        'yanchor': 'top'
+                    },
+            )
 
-            plt.figure(figsize=(14,4))
-            plt.title("Prediction")
-            plt.plot(df_true)
-            plt.plot(df_pred)
+            # Set x-axis title
+            fig.update_xaxes(title_text="Date")
+            # Set y-axes titles
+            fig.update_yaxes(title_text="Closing Price")
+            fig.show()
+            
+
+            # plt.figure(figsize=(14,4))
+            # plt.title("Prediction")
+            # plt.plot(df_true)
+            # plt.plot(df_pred)
