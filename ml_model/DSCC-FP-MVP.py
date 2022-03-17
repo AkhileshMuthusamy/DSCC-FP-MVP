@@ -96,7 +96,9 @@ if __name__ == "__main__":
 
     # dash_viz.app.run_server(debug=True)
 
+    # Applying Time-series analysis on multiple stocks
     stk = stock_analysis.TimeSeriesAnalysis(['AAPL', 'SMSN.IL'])
+    stk.clean_data()
     stk.train_test_split("2021-01-01")
     stk.scale_data()
     stk.prepare_data()

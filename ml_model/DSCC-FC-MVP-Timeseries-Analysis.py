@@ -1,18 +1,16 @@
 from datetime import datetime, timedelta
-from typing import List
+from typing import List, Tuple
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import plotly.graph_objects as go
 from keras.layers import LSTM, Dense, Dropout
 from keras.models import Sequential
+from pandas import DataFrame
+from plotly.subplots import make_subplots
 from sklearn.metrics import mean_squared_error
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.optimizers import SGD
-from plotly.subplots import make_subplots
-import plotly.graph_objects as go
-
-plt.style.use('seaborn-whitegrid')
 
 storage = __import__("DSCC-FP-MVP-Storage")
 
@@ -32,27 +30,62 @@ class TimeSeriesAnalysis:
 
 
     def __init__(self, stock_list: List[str]) -> None:
-        
+        """Perform time-series analysis on multiple stocks
+
+        Args:
+            stock_list (List[str]): List of stocks ticker for which time-series analysis needs to be performed
+        """
         self._stock_list = stock_list
 
         for i in self._stock_list:
             self.df[i] = pd.DataFrame(storage.fetch_stock_data_from_db(i))
             self.df[i].set_index("Date", inplace=True)
+            self.df[i].index = pd.to_datetime(self.df[i].index, format='%Y-%m-%d')
+
+    def clean_data(self):
+        """Fill null values in dataframe with pandas 'ffill' and 'bfill' method
+        """
+        for i in self._stock_list:
+            for j in self._stock_list:
+                if i != j:
+                    diff_index = self.df[i].index.difference(self.df[j].index)
+                    for idx in diff_index:
+                        self.df[j].loc[idx] = [None for _ in range(len(self.df[j].columns))]
+                        self.df[j].sort_index(inplace=True) # Sort the date index in ascending order
+                        self.df[j].fillna(method='ffill', inplace=True) # Fill null value
+                        self.df[j].fillna(method='bfill', inplace=True) # Fill null value
+                        self.df[j].index = pd.to_datetime(self.df[j].index, format='%Y-%m-%d') # Convert index to datetime object
 
 
-    def __split_df(self, dataframe, date_str, col):
+    def __split_df(self, dataframe: DataFrame, date_str: str, col: str) -> Tuple[DataFrame, DataFrame]:
+        """Split the dataframe into half based on the date provided.
+
+        Args:
+            dataframe (DataFrame): Pandas dataframe to split
+            date_str (str): Date at which the data needs to sliced. Format YYYY-MM-DD
+            col (str): Dataframe column to return
+
+        Returns:
+            _type_: _description_
+        """
         date_obj = datetime.strptime(date_str, '%Y-%m-%d') 
         test_date_obj = date_obj + timedelta(days=1) 
 
         return dataframe.loc[:date_obj.date(),col], dataframe.loc[test_date_obj.date():,col]
 
     def train_test_split(self, date: str):
+        """Split dataset into Train and Test set
+
+        Args:
+            date (str): Date at which the data to be split
+        """
         for i in self._stock_list:
             self.df_[i] = {}
             self.df_[i]["Train"], self.df_[i]["Test"] = self.__split_df(self.df[i], date, "Close")
 
     def scale_data(self):
-
+        """Apply MinMaxScaler to train and test set
+        """
         for i in self._stock_list:
             sc = MinMaxScaler(feature_range=(0,1))
             a0 = np.array(self.df_[i]["Train"])
@@ -73,7 +106,8 @@ class TimeSeriesAnalysis:
         print('Test_window_limit:', self.test_window_limit)
 
     def prepare_data(self):
-
+        """Create feature set with 60 day time window
+        """
         
         for j in self._stock_list:
             self.trainset[j] = {}
@@ -96,8 +130,12 @@ class TimeSeriesAnalysis:
             self.testset[j]["X"] = np.reshape(X_test, (X_test.shape[0], X_train.shape[1], 1))
             self.testset[j]["y"] = y_test
 
-    def display_shape(self):
+    def display_shape(self) -> DataFrame:
+        """Display shape of the Train and Test set
 
+        Returns:
+            _type_: Pandas dataframe with shape of each stocks
+        """
         arr_buff = []
         for i in self._stock_list:
             buff = {}
@@ -110,7 +148,9 @@ class TimeSeriesAnalysis:
         return pd.DataFrame(arr_buff, index=self._stock_list)
 
 
-    def train_model(self):
+    def train_model(self) -> None:
+        """Prepare LSTM model on Train set
+        """
         self.regressor = Sequential()
         # First LSTM layer with Dropout regularization
         self.regressor.add(LSTM(units=50, return_sequences=True, input_shape=(60,1)))
@@ -135,7 +175,9 @@ class TimeSeriesAnalysis:
             self.regressor.fit(self.trainset[i]["X"], self.trainset[i]["y"], epochs=20, batch_size=200)
 
 
-    def predict(self):
+    def predict(self) -> None:
+        """Predict time-series value from Test set input
+        """
         self.pred_result = {}
         for i in self._stock_list:
             y_true = self.scaler[i].inverse_transform(self.testset[i]["y"].reshape(-1,1))
@@ -146,11 +188,14 @@ class TimeSeriesAnalysis:
             self.pred_result[i]["Pred"] = y_pred
 
 
-    def visualize(self):
-
+    def visualize(self) -> None:
+        """Visualize the prediction in Plotly graph
+        """
 
         for i in self._stock_list:
             time_index = self.df_[i]["Test"][60:].index
+            print('Pred Shape:', self.pred_result[i]["Pred"].reshape(-1).shape)
+            print('Time Index Shape:', time_index.shape)
             df_pred = pd.Series(self.pred_result[i]["Pred"].reshape(-1), index=time_index)
             df_true = pd.Series(self.pred_result[i]["True"].reshape(-1), index=time_index)
             mse = mean_squared_error(np.array(df_true), np.array(df_pred))
@@ -174,8 +219,3 @@ class TimeSeriesAnalysis:
             fig.update_yaxes(title_text="Closing Price")
             fig.show()
             
-
-            # plt.figure(figsize=(14,4))
-            # plt.title("Prediction")
-            # plt.plot(df_true)
-            # plt.plot(df_pred)
