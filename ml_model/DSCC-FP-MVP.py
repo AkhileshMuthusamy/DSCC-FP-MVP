@@ -3,12 +3,12 @@ from typing import Optional
 import yfinance as yf
 from pandas import DataFrame
 
-storage = __import__("DSCC-FP-MVP-Storage")
-viz = __import__("DSCC-FP-MVP-Visualization")
-dash_viz= __import__("DSCC-FP-MVP-InteractiveVisualization")
-stat = __import__("DSCC-FP-MVP-StatisticalAnalysis")
+# storage = __import__("DSCC-FP-MVP-Storage")
+# viz = __import__("DSCC-FP-MVP-Visualization")
+# dash_viz= __import__("DSCC-FP-MVP-InteractiveVisualization")
+# stat = __import__("DSCC-FP-MVP-StatisticalAnalysis")
 # stock_analysis = __import__("DSCC-FC-MVP-Timeseries-Analysis")
-stock_forcasting = __import__("DSSC-FC-MVP-Timeseries-Forcasting")
+stock_forecast = __import__("DSSC-FC-MVP-Timeseries-Forcasting")
 
 class StockDataCollection:
 
@@ -98,19 +98,13 @@ if __name__ == "__main__":
     # dash_viz.app.run_server(debug=True)
 
     # Applying Time-series analysis on multiple stocks
-    # stk = stock_analysis.TimeSeriesAnalysis(['AAPL', 'SMSN.IL'])
-    # stk.clean_data()
-    # stk.train_test_split("2021-01-01")
-    # stk.scale_data()
-    # stk.prepare_data()
-    # print(stk.display_shape())
-    # stk.train_model()
-    # stk.predict()
-    # stk.visualize()
-    stk = stock_forcasting.TimeSeriesForcasting(['AAPL'])
-    stk1 = stock_forcasting.TimeSeriesForcasting(['SMSN.IL'])
+    stk = stock_forecast.TimeSeriesForecast(['AAPL', 'SMSN.IL'])
+    stk.clean_data()
+    stk.train_test_split("2021-01-01")
+    stk.train_model()
+    stk.predict()
+    stk.visualize()
 
-    
 
 
 
