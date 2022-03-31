@@ -1,76 +1,17 @@
-from typing import Optional
-
-import yfinance as yf
-from pandas import DataFrame
 
 # storage = __import__("DSCC-FP-MVP-Storage")
 # viz = __import__("DSCC-FP-MVP-Visualization")
 # dash_viz= __import__("DSCC-FP-MVP-InteractiveVisualization")
 # stat = __import__("DSCC-FP-MVP-StatisticalAnalysis")
 # stock_analysis = __import__("DSCC-FC-MVP-Timeseries-Analysis")
-stock_forecast = __import__("DSSC-FC-MVP-Timeseries-Forcasting")
-
-class StockDataCollection:
-
-    __data = None
-
-    def __init__(self, stock_name: str, start_date: str, end_date: str) -> None:
-        """Fetch stock data from Yahoo Finance based on stock_name, start_date and end_date
-
-        Args:
-            stock_name (str): Name of the stock
-            start_date (str): Date in 'YYYY-MM-DD' format
-            end_date (str): Date in 'YYYY-MM-DD' format
-        """
-        self._stock_name = stock_name
-        self._start_date = start_date
-        self._end_date = end_date
-
-        self.fetch_stock_data()
-
-    def fetch_stock_data(self) -> DataFrame:
-        """Download the stock market data based on stock_name, start_date and end_date
-
-        Returns:
-            DataFrame: Returns pandas DataFrame
-        """
-        print(f'Downloading stock data: {self._stock_name}')
-        self.__data = yf.download(self._stock_name, start=self._start_date, end=self._end_date)
-        return self.__data
-
-    def get_stock_data(self) -> DataFrame:
-        return self.__data
-
-    def get_stock_name(self) -> str:
-        return self._stock_name
-
-
-    def export_to_file(self, file_name: Optional[str] = None) -> None:
-        """Export the stock data in to file
-
-        Args:
-            file_name (Optional[str], optional): Custom file name for the csv file. Defaults to None.
-        """
-        if isinstance(self.__data, DataFrame):
-            file_path = f'{file_name}.csv' if file_name else f'{self._stock_name}.csv'
-            self.__data.to_csv(file_path)
-            print('-'*100)
-            print(f'Exported file: {file_path}')
-            print('-'*100)
-        else:
-            raise Exception("No date to export")
-
-    def display_data(self) -> None:
-        """Displays stock data in the command terminal
-        """
-        print('-'*100)
-        print(f'Stock Name: {self._stock_name}')
-        print('-'*100)
-        print(self.__data)
-        print('-'*100, end='\n')
+# stock_forecast = __import__("DSSC-FC-MVP-Timeseries-Forcasting")
+web_dash = __import__("DSCC-FC-MVP-Demo")
 
 
 if __name__ == "__main__":
+    
+    web_dash.app.run_server(debug=True)
+
     # s = stat.StatisticalAnalysis()
     # # Collecting Apple stock from API
     # apple_stock = StockDataCollection('AAPL', '2018-01-01', '2019-12-31')
@@ -95,15 +36,14 @@ if __name__ == "__main__":
     # viz.line_chart(stock_data, column="Close", y_label="Closing Price", title="Closing Price of stocks")
     # viz.line_chart(stock_data, column="Volume", y_label="Volume", title="Stock Volumes Over Time")
 
-    # dash_viz.app.run_server(debug=True)
 
     # Applying Time-series analysis on multiple stocks
-    stk = stock_forecast.TimeSeriesForecast(['AAPL', 'SMSN.IL'])
-    stk.clean_data()
-    stk.train_test_split("2021-01-01")
-    stk.train_model()
-    stk.predict()
-    stk.visualize()
+    # stk = stock_forecast.TimeSeriesForecast(['AAPL', 'SMSN.IL'])
+    # stk.clean_data()
+    # stk.train_test_split("2021-01-01")
+    # stk.train_model()
+    # stk.predict()
+    # stk.visualize()
 
 
 
