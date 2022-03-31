@@ -10,8 +10,10 @@
         "Ohlc",
         "SMSN",
         "SSNLF",
+        "tonexty",
         "xaxes",
         "yaxes",
-        "yfinance"
+        "yfinance",
+        "yhat"
     ]
 }
